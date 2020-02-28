@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+
+import Header from "../../components/Header";
 
 import {
   Navbar,
@@ -66,23 +67,10 @@ class Home extends React.Component {
   render() {
     return (
       <>
-        <Navbar color="dark">
-          <Container className="d-flex justify-content-center">
-            <img
-              className="border border-white rounded-circle mr-2"
-              src={this.state.user.avatar_url}
-              alt="Foto de usuário"
-              height="50"
-              width="50"
-            />
-            <span className="text-white">
-              Logado como
-              <Link to="/" className="font-weight-bold text-white ml-1">
-                {this.state.user.login}
-              </Link>
-            </span>
-          </Container>
-        </Navbar>
+        <Header
+          avatar={this.state.user.avatar_url}
+          username={this.state.user.login}
+        />
 
         <Navbar color="dark" fixed="bottom">
           <Container className="d-flex justify-content-center">
