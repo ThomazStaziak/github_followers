@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 import {
   Navbar,
@@ -15,23 +16,33 @@ import {
   Spinner,
   Container,
   Row,
-  Col
+  Col,
+  CardText
 } from "reactstrap";
 
 import { MdSearch, MdPeople } from "react-icons/md";
+import { FaGithub } from "react-icons/fa";
 
 class Home extends React.Component {
   state = {
     loading: false,
-    followers: []
+    followers: [],
+    user: {}
+  };
+
+  componentDidMount = async () => {
+    const response = await axios.get(
+      `https://api.github.com/users/${this.props.match.params.username}`
+    );
+
+    this.setState({ user: response.data });
   };
 
   loadFollowers = async evt => {
     evt.preventDefault();
 
     this.setState({
-      loading: true,
-      followers: []
+      loading: true
     });
 
     const form = evt.target;
@@ -55,6 +66,24 @@ class Home extends React.Component {
   render() {
     return (
       <>
+        <Navbar color="dark">
+          <Container className="d-flex justify-content-center">
+            <img
+              className="border border-white rounded-circle mr-2"
+              src={this.state.user.avatar_url}
+              alt="Foto de usuário"
+              height="50"
+              width="50"
+            />
+            <span className="text-white">
+              Logado como
+              <Link to="/" className="font-weight-bold text-white ml-1">
+                {this.state.user.login}
+              </Link>
+            </span>
+          </Container>
+        </Navbar>
+
         <Navbar color="dark" fixed="bottom">
           <Container className="d-flex justify-content-center">
             <Col xs="12" md="6">
@@ -91,6 +120,15 @@ class Home extends React.Component {
                     <CardTitle className="text-center">
                       {follower.login}
                     </CardTitle>
+                    <CardText className="text-center">
+                      <a
+                        href={follower.html_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <FaGithub size="20%" color="#FFF" />
+                      </a>
+                    </CardText>
                   </CardBody>
                 </Card>
               </Col>
